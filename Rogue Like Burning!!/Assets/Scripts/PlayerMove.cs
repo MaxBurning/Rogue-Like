@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
-using System.Collections;
 
-public class Player : MonoBehaviour {
+public class PlayerMove : MonoBehaviour {
     //向きの列挙体
     enum eDirection
     {
