@@ -65,6 +65,10 @@
   <ItemGroup>
     <Compile Include="Assets\FightingUnityChan_FreeAsset\FightingUnityChan_FreeAsset\Scripts\CameraController.cs" />
     <Compile Include="Assets\FightingUnityChan_FreeAsset\FightingUnityChan_FreeAsset\Scripts\IdleChanger.cs" />
+    <Compile Include="Assets\Scripts\AudioMgr.cs" />
+    <Compile Include="Assets\Scripts\Extentions\MyMonoBehaviour.cs" />
+    <Compile Include="Assets\Scripts\Extentions\SingletonMonoBehaviour.cs" />
+    <Compile Include="Assets\Scripts\MapManager.cs" />
     <Compile Include="Assets\Scripts\PlayerMove.cs" />
     <Compile Include="Assets\UnityChan\Scripts\AutoBlink.cs" />
     <Compile Include="Assets\UnityChan\Scripts\AutoBlinkforSD.cs" />
