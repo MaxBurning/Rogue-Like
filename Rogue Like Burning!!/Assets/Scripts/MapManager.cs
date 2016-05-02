@@ -27,9 +27,9 @@ public class MapManager : MonoBehaviour {
     {
         mBoardHolder = new GameObject("Board").transform;
 
-       for(int column = 1; column < mColumns; column++)
+       for(int column = 0; column < mColumns; column++)
         {
-            for(int row = 1; row < mRows; row++)
+            for(int row = 0; row < mRows; row++)
             {
                 GameObject instance = Instantiate(mFloor, new Vector3(column, 0.0f, row),
                                       Quaternion.identity) as GameObject;
