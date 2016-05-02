@@ -6,14 +6,15 @@
 
 public class MapManager : MonoBehaviour {
 
-    private int mRows = 5;
-    private int mColumns = 5;
+    
     private Transform mBoardHolder;
 
     public GameObject mFloor;
+    public int mRows = 5;
+    public int mColumns = 5;
 
-	// Use this for initialization
-	void Start ()
+    // Use this for initialization
+    void Start ()
     {
         MapSetting();
     }
