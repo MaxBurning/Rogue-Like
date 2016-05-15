@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// ゲーム内のあれこれを行うクラス
+/// 
 /// </summary>
 
 public class GameManager : MonoBehaviour {
@@ -12,9 +12,4 @@ public class GameManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {}
 
-    // スタートボタンに相当するものが押されたらメニューを開く
-    void OpenMenu()
-    {
-
-    }
 }
