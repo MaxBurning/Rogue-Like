@@ -18,26 +18,23 @@ public class MapMgr : MonoBehaviour
     // マス毎のタイプ
     enum eStageObject : short
     {
-        //壁
+        // 壁
         Wall = 0,
-        //床(=1)
-        Floor
-    };
-
-    // マップのタイプを取得する(操作キャラの生成に使いたい)
-    public Vector3 propFloorPos
-    {
-        get
-        { return Vector3.zero; }
-    }
+        // 床(=1)
+        Floor,
+        // 階段
+        Stairs
+    };   
 
     // プレハブを保存するリスト
     public List<GameObject> mStageObject = new List<GameObject>();
     public int mRows = 10;       // マップの横
     public int mColumns = 10;    // マップの縦
 
-    private sChipData[] mMapData = null;  //マップの管理
+    private sChipData[] mMapData = null;  // マップの管理
     private int mRect = 0;                // フロアにする範囲
+    private List<Vector3> mFloorList;    // フロアマスを格納するリスト
+
 
     // Use this for initialization
     void Start()
@@ -94,4 +91,24 @@ public class MapMgr : MonoBehaviour
             ++pos.z;
         }
     }
+
+    // 階段の生成
+    void SetStairs()
+    {
+        // マス毎のデータタイプを判別
+        foreach(sChipData s in mMapData)
+        {
+            // フロアタイプのマスはリストに追加
+            if (s.Type == eStageObject.Floor)
+            {
+                mFloorList.Add(s.go.transform.position);
+            }
+        }
+
+        // フロアマスの座標を格納したリストからランダムで座標を取得し、
+        // 取得した座標マスのタイプをStairに変更
+        Vector3 StairsPos = mFloorList[Random.Range(0, mFloorList.Count - 1)];
+        
+    }
+
 }
