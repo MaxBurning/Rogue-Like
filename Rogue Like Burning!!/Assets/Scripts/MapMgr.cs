@@ -28,7 +28,7 @@ public class MapMgr : MonoBehaviour
     public Vector3 propFloorPos
     {
         get
-            { return Vector3.zero; }
+        { return Vector3.zero; }
     }
 
     // プレハブを保存するリスト
@@ -74,22 +74,19 @@ public class MapMgr : MonoBehaviour
         {
             for (int row = 0; row < mRows; ++row)
             {
+                // マップの端以外は生成するオブジェクトのタイプを壁に(要改善)
+                if (column == 0 || column == mColumns - 1 || row == 0 || row == mRows - 1)
+                    mMapData[rect].Type = eStageObject.Wall;
+
                 // 指定したタイプのデータをインスタンス化
                 mMapData[rect].go = Instantiate(mStageObject[(int)mMapData[rect].Type], pos,
                                     Quaternion.identity) as GameObject;
-
-                // マップの端以外は生成するオブジェクトのタイプを壁に(要改善)
-                if (column == 0 || column == mColumns - 1 || row == 0 || row == mRows - 1)
-                {
-                    mMapData[rect].Type = eStageObject.Wall;
-                    mMapData[rect].go = Instantiate(mStageObject[(int)mMapData[rect].Type], pos,
-                                        Quaternion.identity) as GameObject;
-                }
 
                 // クローンの削除
                 mMapData[rect].go.name = mStageObject[(int)mMapData[rect].Type].name;
                 // 親要素の指定
                 mMapData[rect].go.transform.parent = work.transform;
+
                 ++pos.x;
                 ++rect;
             }
