@@ -5,7 +5,7 @@ using System.Collections.Generic;
 /// マップを生成するクラス
 /// </summary>
 
-public class MapManager : MonoBehaviour
+public class MapMgr : MonoBehaviour
 {
 
     // マス毎のデータ
@@ -24,10 +24,17 @@ public class MapManager : MonoBehaviour
         Floor
     };
 
+    // マップのタイプを取得する(操作キャラの生成に使いたい)
+    public Vector3 propFloorPos
+    {
+        get
+            { return Vector3.zero; }
+    }
+
     // プレハブを保存するリスト
     public List<GameObject> mStageObject = new List<GameObject>();
-    public int mRows = 5;       // マップの横
-    public int mColumns = 5;    // マップの縦
+    public int mRows = 10;       // マップの横
+    public int mColumns = 10;    // マップの縦
 
     private sChipData[] mMapData = null;  //マップの管理
     private int mRect = 0;                // フロアにする範囲
@@ -39,10 +46,10 @@ public class MapManager : MonoBehaviour
         mRect = mRows * mColumns;
         mMapData = new sChipData[mRect];
 
-        // マップタイプを壁に初期化
+        // マップタイプを床に初期化
         for (int i = 0; i < mRect; ++i)
         {
-            mMapData[i].Type = eStageObject.Wall;
+            mMapData[i].Type = eStageObject.Floor;
         }
 
         // マップの配置
@@ -69,7 +76,16 @@ public class MapManager : MonoBehaviour
             {
                 // 指定したタイプのデータをインスタンス化
                 mMapData[rect].go = Instantiate(mStageObject[(int)mMapData[rect].Type], pos,
+                                    Quaternion.identity) as GameObject;
+
+                // マップの端以外は生成するオブジェクトのタイプを壁に(要改善)
+                if (column == 0 || column == mColumns - 1 || row == 0 || row == mRows - 1)
+                {
+                    mMapData[rect].Type = eStageObject.Wall;
+                    mMapData[rect].go = Instantiate(mStageObject[(int)mMapData[rect].Type], pos,
                                         Quaternion.identity) as GameObject;
+                }
+
                 // クローンの削除
                 mMapData[rect].go.name = mStageObject[(int)mMapData[rect].Type].name;
                 // 親要素の指定
