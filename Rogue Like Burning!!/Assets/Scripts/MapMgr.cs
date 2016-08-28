@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 
 /// <summary>
-/// マップを生成するクラス
+/// マップの生成を行います。
 /// </summary>
-
 public class MapMgr : MonoBehaviour
 {
+
+#region Struct & Enum
 
     // マス毎のデータ
     struct sChipData
@@ -22,24 +23,57 @@ public class MapMgr : MonoBehaviour
         Wall = 0,
         // 床(=1)
         Floor,
-        // 階段
+        // 階段(=2)
         Stairs
     };   
 
-    // プレハブを保存するリスト
+#endregion Struct & Enum
+
+#region Field
+
+    /// <summary>
+    /// プレハブを格納します。
+    /// </summary>
     public List<GameObject> mStageObject = new List<GameObject>();
-    public int mRows = 10;       // マップの横
-    public int mColumns = 10;    // マップの縦
+    
+    /// <summary>
+    /// マップの行数を設定します。
+    /// </summary>
+    public int mRows = 10;  
+    
+    /// <summary>
+    /// マップの列数を設定します。
+    /// </summary>    
+    public int mColumns = 10;    
 
-    private sChipData[] mMapData = null;  // マップの管理
-    private int mRect = 0;                // フロアにする範囲
-    private List<Vector3> mFloorList;    // フロアマスを格納するリスト
+    private sChipData[] mMapData = null;
+    private int mRect = 0;
+    private static List<Vector3> mFloorList = new List<Vector3>(); 
+    private Vector3 mStairPos;
 
+#endregion Field
 
-    // Use this for initialization
-    void Start()
+#region Property
+
+    /// <summary>
+    /// 床オブジェクトの座標リストを取得します。
+    /// </summary>
+    /// <returns>床オブジェクトの座標リスト</returns>
+    public static List<Vector3> FloorList
     {
-        // フロアにする範囲の計算(line 37, 38)
+        get{return mFloorList;}
+    }
+
+#endregion Property
+
+#region Method
+
+    /// <summary>
+    /// シーン開始時に一度だけ実行されます。
+    /// </summary>
+    private void Awake()
+    {
+        // フロアにする範囲の計算
         mRect = mRows * mColumns;
         mMapData = new sChipData[mRect];
 
@@ -50,17 +84,21 @@ public class MapMgr : MonoBehaviour
         }
 
         // マップの配置
-        MapSetting();
+        this.MapSetting();
+        this.SetStairs();
+
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
 
     }
 
-    // マップの生成
-    void MapSetting()
+    /// <summary>
+    /// 床と壁を設置します。
+    /// </summary>
+    private void MapSetting()
     {
         int rect = 0;
         Vector3 pos = Vector3.zero;
@@ -76,8 +114,9 @@ public class MapMgr : MonoBehaviour
                     mMapData[rect].Type = eStageObject.Wall;
 
                 // 指定したタイプのデータをインスタンス化
-                mMapData[rect].go = Instantiate(mStageObject[(int)mMapData[rect].Type], pos,
-                                    Quaternion.identity) as GameObject;
+                mMapData[rect].go = Instantiate(mStageObject[(int)mMapData[rect].Type]
+                                    , pos
+                                    , Quaternion.identity) as GameObject;
 
                 // クローンの削除
                 mMapData[rect].go.name = mStageObject[(int)mMapData[rect].Type].name;
@@ -92,8 +131,32 @@ public class MapMgr : MonoBehaviour
         }
     }
 
-    // 階段の生成
-    void SetStairs()
+    /// <summary>
+    /// 階段を設置します。
+    /// </summary>
+    private void SetStairs()
+    {
+        this.AddFloorsPos();
+
+        // フロアマスの座標を格納したリストからランダムで座標を取得し、
+        // 取得した座標マスのタイプをStairに変更
+        this.mStairPos = mFloorList[Random.Range(0, mFloorList.Count - 1)];
+        
+        // 階段の座標をリストから削除しておく
+        for(int i = 0; i < mFloorList.Count - 1; ++i)
+        {
+            if(mFloorList[i] == this.mStairPos)
+            {
+                mFloorList.RemoveAt(i);
+            }
+        }
+
+    }
+
+    /// <summary>
+    /// 床オブジェクトの座標を追加します。
+    /// </summary>
+    private void AddFloorsPos()
     {
         // マス毎のデータタイプを判別
         foreach(sChipData s in mMapData)
@@ -104,11 +167,8 @@ public class MapMgr : MonoBehaviour
                 mFloorList.Add(s.go.transform.position);
             }
         }
-
-        // フロアマスの座標を格納したリストからランダムで座標を取得し、
-        // 取得した座標マスのタイプをStairに変更
-        Vector3 StairsPos = mFloorList[Random.Range(0, mFloorList.Count - 1)];
-        
     }
+
+#endregion Method
 
 }
